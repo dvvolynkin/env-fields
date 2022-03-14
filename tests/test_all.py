@@ -9,6 +9,10 @@ from env_fields import (
     env_field_str,
     env_field_float,
     env_field,
+    env_var_getter,
+    str_env_var_getter,
+    int_env_var_getter,
+    float_env_var_getter,
 )
 
 given = pytest.mark.parametrize
@@ -34,6 +38,22 @@ def test_ready_field_types(
     assert SomeDataClass().env_var == expected_res_value
 
 
+@given(
+    "env_var_getter, env_var_value, expected_res_value",
+    [
+        (int_env_var_getter, "12", 12),
+        (str_env_var_getter, "12", "12"),
+        (float_env_var_getter, "1.2", 1.2),
+    ],
+)
+def test_ready_env_var_getters(
+    monkeypatch, env_var_getter, env_var_value, expected_res_value
+):
+    monkeypatch.setattr(os, "environ", {"SOME_ENV_VAR_NAME": env_var_value})
+
+    assert env_var_getter("SOME_ENV_VAR_NAME")() == expected_res_value
+
+
 def test_env_field(monkeypatch):
     @dataclass
     class SomeDataClass:
@@ -42,3 +62,11 @@ def test_env_field(monkeypatch):
     assert SomeDataClass().env_var == 12323
     monkeypatch.setattr(os, "environ", {"SOME_ENV_VAR_NAME": "hello, world"})
     assert SomeDataClass().env_var == "hello, world"
+
+
+def test_env_var_getter(monkeypatch):
+    getter = env_var_getter("SOME_ENV_VAR_NAME", str, default=12323)
+
+    assert getter() == 12323
+    monkeypatch.setattr(os, "environ", {"SOME_ENV_VAR_NAME": "hello, world"})
+    assert getter() == "hello, world"
