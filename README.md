@@ -4,7 +4,7 @@
 [![codecov](https://codecov.io/gh/dvvolynkin/env-fields/branch/main/graph/badge.svg?token=env-fields_token_here)](https://codecov.io/gh/dvvolynkin/env-fields)
 [![CI](https://github.com/dvvolynkin/env-fields/actions/workflows/main.yml/badge.svg)](https://github.com/dvvolynkin/env-fields/actions/workflows/main.yml)
 
-Awesome env_fields created by dvvolynkin
+Dataclass fields with getting values from environment by default
 
 ## Install it from PyPI
 
@@ -35,11 +35,6 @@ class SomeClass:
     )
     attribute_5: int = env_field("SOME_CUSTOM_TYPE_ENV_VARIABLE", float, init=False)
 
-
-os.environ['SOME_INT_ENVIRONMENT_VARIABLE'] = "1234"
-os.environ['SOME_STR_ENVIRONMENT_VARIABLE'] = "hello, world 1"
-os.environ['SOME_CUSTOM_TYPE_ENV_VARIABLE'] = "2.59"
-
 ```
 Let's create some dataclass!
 ```python
@@ -47,7 +42,13 @@ Let's create some dataclass!
 >>> os.environ['SOME_STR_ENVIRONMENT_VARIABLE'] = "hello, world 1"
 >>> os.environ['SOME_CUSTOM_TYPE_ENV_VARIABLE'] = "2.59"
 >>> SomeClass(12)
-SomeClass(attribute_1=12, attribute_2=1234, attribute_3='hello, world 1', attribute_4='hello, world', attribute_5=2.59
+SomeClass(
+    attribute_1=12,
+    attribute_2=1234,
+    attribute_3='hello, world 1',
+    attribute_4='hello, world',
+    attribute_5=2.59,
+)
 ```
 
 

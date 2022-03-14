@@ -1,8 +1,8 @@
 import os
-from functools import partial
 from dataclasses import field
+from functools import partial
 
-_EmptyType = type('_EmptyType', (object,), {})
+_EmptyType = type("_EmptyType", (object,), {})
 NO_DEFAULT_VALUE = _EmptyType()
 
 
@@ -39,11 +39,9 @@ def env_field(name, cast, default=NO_DEFAULT_VALUE, **kwargs):
 
 
 def _specific_env_field(cast):
-    return partial(
-        env_field,
-        cast=cast
-    )
+    return partial(env_field, cast=cast)
 
 
 env_field_str = _specific_env_field(str)
 env_field_int = _specific_env_field(int)
+env_field_float = _specific_env_field(float)
